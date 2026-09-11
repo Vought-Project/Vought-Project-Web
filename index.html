@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vought Project — Next-Gen OneUI Ecosystem</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        :root {
+            --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            --font-heading: 'Space Grotesk', sans-serif;
+
+            --bg-base: #06070a;
+            --card-bg: rgba(18, 20, 29, 0.55);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --card-hover-border: rgba(255, 65, 108, 0.4);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+
+            --primary: #ff416c;
+            --secondary: #ff4b2b;
+            --accent-gradient: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            --accent-glow: rgba(255, 65, 108, 0.25);
+
+            --transition-smooth: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            margin: 0;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 { font-family: var(--font-heading); }
+
+        #starCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            background-color: var(--bg-base);
+        }
+
+        .view {
+            display: none;
+            animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .view.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glass-panel {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+        }
+
+        .nav-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: var(--transition-smooth);
+            padding: 8px 16px;
+            border-radius: 12px;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 28px;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--card-hover-border);
+            box-shadow: 0 20px 40px -15px rgba(255, 65, 108, 0.25);
+        }
+
+        .device-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 24px;
+            transition: var(--transition-smooth);
+        }
+
+        .device-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+        }
+
+        .gradient-text {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Animated Feature Canvas Styles */
+        .features-wrapper {
+            position: relative;
+            border-radius: 28px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+        }
+
+        #featureCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="starCanvas"></canvas>
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] w-[92%] max-w-5xl glass-panel px-6 py-3 flex items-center justify-between">
+        <div class="font-heading font-bold text-lg tracking-wider cursor-pointer flex items-center gap-3" onclick="switchView('home')">
+            <span class="w-2.5 h-2.5 rounded-full bg-pink-500 shadow-[0_0_12x_#ff416c]"></span>
+            <span>VOUGHT<span class="w-2.5 h-2.5 shadow-[0_0_12x_#ff416c]"> PROJECT</span></span>
+        </div>
+        <div class="flex gap-1 bg-white/5 p-1 rounded-2xl border border-white/5">
+            <button id="nav-home" onclick="switchView('home')" class="nav-btn active">Home</button>
+            <button id="nav-changelog" onclick="switchView('changelog')" class="nav-btn">Changelog</button>
+            <button id="nav-screenshots" onclick="switchView('screenshots')" class="nav-btn">Screenshots</button>
+        </div>
+    </nav>
+
+    <!-- PAGE 1: HOME -->
+    <main id="homeView" class="view active pt-32 pb-24 px-6 max-w-6xl mx-auto space-y-24">
+
+        <!-- Hero Section -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center reveal pt-4">
+            <div class="lg:col-span-7 space-y-6">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-400 text-xs font-semibold tracking-wide uppercase">
+                    <span class="w-2 h-2 rounded-full bg-pink-500 animate-pulse"></span> One UI 8.5 Ecosystem
+                </div>
+
+                <h1 class="text-5xl sm:text-6xl font-extrabold tracking-tight leading-[1.1]">
+                    Unleash raw <br>
+                    <span class="gradient-text">efficiency & speed.</span>
+                </h1>
+
+                <p class="text-slate-400 text-base sm:text-lg max-w-xl leading-relaxed">
+                    A finely-tuned custom ROM built for Samsung devices. Stripped of bloatware, unlocked for full control, and optimized for extreme performance.
+                </p>
+
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <a href="#devices" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-pink-500 to-orange-500 text-white font-semibold text-sm shadow-[0_10px_25px_rgba(255,65,108,0.3)] hover:shadow-[0_15px_30px_rgba(255,65,108,0.4)] hover:-translate-y-0.5 transition-all flex items-center gap-2">
+                        <i class="ph-bold ph-download-simple text-lg"></i> Get Downloads
+                    </a>
+                    <a href="https://t.me/VoughtProject" target="_blank" rel="noopener" class="px-6 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold text-sm hover:-translate-y-0.5 transition-all flex items-center gap-2">
+                        <i class="ph-bold ph-telegram-logo text-lg text-sky-400"></i> Telegram Community
+                    </a>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-3 gap-4 pt-6 border-t border-white/10 max-w-lg">
+                    <div>
+                        <div class="text-2xl font-bold font-heading">3 Active</div>
+                        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Dev Builds</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold font-heading">8+ Features</div>
+                        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Kernel Tweak</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold font-heading">8.5 - 8 - 7</div>
+                        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Base Version</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Feature Display Card -->
+            <div class="lg:col-span-5">
+                <div class="glass-panel p-6 relative overflow-hidden space-y-6">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                            <span class="text-xs font-mono text-slate-300 uppercase tracking-widest">System Status</span>
+                        </div>
+                        <span class="text-xs font-mono bg-white/10 px-2.5 py-1 rounded-md text-pink-400">BUILD: LIVE</span>
+                    </div>
+
+                    <div class="space-y-3 font-mono text-xs">
+                        <div class="p-3 rounded-lg bg-black/40 border border-white/5 flex items-center justify-between">
+                            <span class="text-slate-400">Framework Log</span>
+                            <span class="text-emerald-400">Disabled screenshots detection</span>
+                        </div>
+                        <div class="p-3 rounded-lg bg-black/40 border border-white/5 flex items-center justify-between">
+                            <span class="text-slate-400">Safe Overclock</span>
+                            <span class="text-emerald-400">MaowzzaKernel is supported</span>
+                        </div>
+                        <div class="p-3 rounded-lg bg-black/40 border border-white/5 flex items-center justify-between">
+                            <span class="text-slate-400">Secure Folder</span>
+                            <span class="text-emerald-400">Integrated</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-pink-500/10 border border-pink-500/20 text-xs text-slate-300">
+                        <p class="font-semibold text-pink-400 mb-1">Vought Project active</p>
+                        Real-time kernel / system level tweaks applied automatically on boot.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Showcase Grid with Canvas Animation -->
+        <section class="space-y-8">
+            <div class="text-center max-w-2xl mx-auto space-y-3 reveal">
+                <h2 class="text-3xl font-bold">Built for Maximum Capability</h2>
+                <p class="text-slate-400 text-sm">Every core service in OneUI has been optimized, modified, or completely rewritten for raw performance.</p>
+            </div>
+
+            <!-- Animated Container Wrapper -->
+            <div class="features-wrapper reveal">
+                <canvas id="featureCanvas"></canvas>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                    <div class="feature-card" style="transition-delay: 0.1s;">
+                        <div class="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/20 text-pink-400 flex items-center justify-center text-2xl mb-5">
+                            <i class="ph-bold ph-cpu"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Vought Project Mod</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Disabled screenshot protection, real-time Secure Folder patches, Samsung DeX fully enabled, and customized system parameters.
+                        </p>
+                    </div>
+
+                    <div class="feature-card" style="transition-delay: 0.2s;">
+                        <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-400 flex items-center justify-center text-2xl mb-5">
+                            <i class="ph-bold ph-lightning"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Custom Kernels</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Backported Long, GenV, and MaowzzaKernel sources. Tuned custom DVFS scaling tables for incredible battery life and reduced heat.
+                        </p>
+                    </div>
+
+                    <div class="feature-card" style="transition-delay: 0.3s;">
+                        <div class="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center text-2xl mb-5">
+                            <i class="ph-bold ph-shield-check"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Clean Framework</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            ATrace and Knox telemetry logging completely stripped out. Optimized Vulkan rendering pipelines for high-FPS gaming.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Devices Section -->
+        <section id="devices" class="space-y-8 pt-6">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/10 pb-6 reveal">
+                <div>
+                    <h2 class="text-3xl font-bold">Supported devices</h2>
+                    <p class="text-slate-400 text-sm mt-1">Select your devices platform to download build zips.</p>
+                </div>
+                <span class="text-xs font-mono text-slate-500">UPDATED REGULARLY</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Device 1: A12s -->
+                <div class="device-card reveal flex flex-col justify-between space-y-6">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono bg-white/10 px-2 py-0.5 rounded text-slate-300">SM-A127F/M</span>
+                            <span class="text-xs font-medium text-emerald-400 flex items-center gap-1"><i class="ph-fill ph-circle text-[8px]"></i> Stable</span>
+                        </div>
+                        <h3 class="text-2xl font-bold">Galaxy A12s</h3>
+                        <p class="text-xs text-slate-400">Maintained by <span class="text-slate-200 font-medium">Dai-doz</span></p>
+                    </div>
+                    <button onclick="openVersionModal('a12s')" class="w-full py-3 rounded-xl bg-pink-500/10 border border-pink-500/30 hover:bg-pink-500 hover:text-white text-pink-400 font-semibold text-sm transition-all text-center flex items-center justify-center gap-2">
+                        <i class="ph-bold ph-download-simple"></i> Choose Edition
+                    </button>
+                </div>
+
+                <!-- Device 2: A35 5G / A356E -->
+                <div class="device-card reveal flex flex-col justify-between space-y-6" style="transition-delay: 0.1s;">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono bg-white/10 px-2 py-0.5 rounded text-slate-300">SM-A356E</span>
+                            <span class="text-xs font-medium text-emerald-400 flex items-center gap-1"><i class="ph-fill ph-circle text-[8px]"></i> Stable</span>
+                        </div>
+                        <h3 class="text-2xl font-bold">Galaxy A35 5G</h3>
+                        <p class="text-xs text-slate-400">Maintained by <span class="text-slate-200 font-medium">Homelander</span></p>
+                    </div>
+                    <button onclick="openVersionModal('a356e')" class="w-full py-3 rounded-xl bg-pink-500/10 border border-pink-500/30 hover:bg-pink-500 hover:text-white text-pink-400 font-semibold text-sm transition-all text-center flex items-center justify-center gap-2">
+                        <i class="ph-bold ph-download-simple"></i> Choose Edition
+                    </button>
+                </div>
+
+                <!-- Device 3: A51 -->
+                <div class="device-card reveal flex flex-col justify-between space-y-6" style="transition-delay: 0.2s;">
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono bg-white/10 px-2 py-0.5 rounded text-slate-300">SM-A515F/M</span>
+                            <span class="text-xs font-medium text-emerald-400 flex items-center gap-1"><i class="ph-fill ph-circle text-[8px]"></i> Stable</span>
+                        </div>
+                        <h3 class="text-2xl font-bold">Galaxy A51</h3>
+                        <p class="text-xs text-slate-400">Maintained by <span class="text-slate-200 font-medium">Xv2ice</span></p>
+                    </div>
+                    <button onclick="openVersionModal('a51')" class="w-full py-3 rounded-xl bg-pink-500/10 border border-pink-500/30 hover:bg-pink-500 hover:text-white text-pink-400 font-semibold text-sm transition-all text-center flex items-center justify-center gap-2">
+                        <i class="ph-bold ph-download-simple"></i> Choose Edition
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Setup Instructions Section -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-6">
+            <div class="lg:col-span-5 space-y-4 reveal">
+                <h2 class="text-3xl font-bold">Flashing Instructions</h2>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    Please follow the steps carefully to avoid soft-bricking your device. Make sure you back up critical data before unlocking the bootloader.
+                </p>
+
+                <div class="p-4 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-300 text-xs space-y-2">
+                    <div class="font-bold uppercase tracking-wider flex items-center gap-2">
+                        <i class="ph-bold ph-warning text-base"></i> Warning Disclaimer
+                    </div>
+                    <p class="text-slate-400">
+                        Flashing custom firmware voids your warranty. We are not responsible for bricked phones, lost data, or hardware damage.
+                    </p>
+                </div>
+            </div>
+
+            <div class="lg:col-span-7 glass-panel p-6 sm:p-8 space-y-6 reveal">
+                <h3 class="text-xl font-bold flex items-center gap-2 border-b border-white/10 pb-4">
+                    <i class="ph-bold ph-steps text-pink-500"></i> Installation Guide
+                </h3>
+
+                <div class="space-y-4 text-xs sm:text-sm text-slate-300">
+                    <div class="flex items-start gap-4">
+                        <span class="w-6 h-6 rounded-md bg-white/10 text-pink-400 font-bold flex items-center justify-center flex-shrink-0 font-mono">1</span>
+                        <p>Verify you are on the latest Stock firmware (Check via SamFW) and ensure bootloader is unlocked.</p>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <span class="w-6 h-6 rounded-md bg-white/10 text-pink-400 font-bold flex items-center justify-center flex-shrink-0 font-mono">2</span>
+                        <p>Flash OFOX/TWRP and flash your patched vbmeta using Odin with Auto Reboot unticked.</p>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <span class="w-6 h-6 rounded-md bg-white/10 text-pink-400 font-bold flex items-center justify-center flex-shrink-0 font-mono">3</span>
+                        <p>Reboot into custom recovery, flash <a href="https://t.me/VoughtProject/8815/8929" target="_blank" class="text-pink-400 underline underline-offset-2">repartition.zip</a>, restart recovery, then wipe data & system partitions [Repartition for A127X].</p>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <span class="w-6 h-6 rounded-md bg-white/10 text-pink-400 font-bold flex items-center justify-center flex-shrink-0 font-mono">4</span>
+                        <p>Sideload or install the ROM zip, format data, then reboot system!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PAGE 2: CHANGELOG -->
+    <main id="changelogView" class="view pt-40 pb-20 px-6 max-w-4xl mx-auto">
+        <h2 class="text-4xl font-bold mb-4 text-center">Changelog</h2>
+        <p class="text-slate-400 mb-8 text-sm text-center">Release history and update logs sorted by editions.</p>
+
+        <!-- Edition Selector Options for Changelog -->
+        <div class="flex justify-center items-center gap-3 mb-10 flex-wrap">
+            <button onclick="switchChangelog('all', this)" class="changelog-btn px-4 py-2 rounded-full text-sm font-bold text-pink-500 bg-pink-950/40 border border-pink-500/50 transition-all duration-300 transform active:scale-95 shadow-lg shadow-pink-900/30">All Editions</button>
+            <button onclick="switchChangelog('vanilla', this)" class="changelog-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Vanilla Edition</button>
+            <button onclick="switchChangelog('crystal', this)" class="changelog-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Crystal Edition</button>
+            <button onclick="switchChangelog('standard', this)" class="changelog-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Standard Edition</button>
+        </div>
+
+        <!-- Changelog Container Grid/List -->
+        <div id="changelogContainer" class="space-y-6 transition-all duration-300 opacity-100 transform translate-y-0">
+
+            <!-- Standard V3.0 -->
+            <div class="glass-panel p-8 space-y-4 changelog-item" data-edition="standard">
+                <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                    <h3 class="text-2xl font-bold text-pink-500">v3.0 - Standard Edition</h3>
+                    <span class="text-xs font-mono text-slate-400">Standard Release</span>
+                </div>
+                <div class="space-y-3 text-slate-300 text-sm">
+                    <p class="font-semibold text-pink-400">Fixed:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>SSRM</li>
+                        <li>Hyperlapse UHD</li>
+                    </ul>
+                    <p class="font-semibold text-pink-400 pt-2">Added:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Outdoor Mode</li>
+                        <li>Dex</li>
+                        <li>Battery Health Info</li>
+                        <li>AppLock</li>
+                        <li>New CF.xml</li>
+                        <li>Extra Brightness</li>
+                    </ul>
+                    <p class="font-semibold text-pink-400 pt-2">Patched:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Knox</li>
+                        <li>Compatibility</li>
+                    </ul>
+                    <p class="font-semibold text-pink-400 pt-2">Miscs:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Nuked Old SecSettings Patches</li>
+                        <li>Nuked Cidmanager For Update Popup</li>
+                        <li>Prevent Screenshot Detection</li>
+                        <li>ROM Info In Build Number</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Standard V2.0 -->
+            <div class="glass-panel p-8 space-y-4 changelog-item" data-edition="standard">
+                <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                    <h3 class="text-2xl font-bold text-pink-500">v2.0 - Standard Edition</h3>
+                    <span class="text-xs font-mono text-slate-400">Standard Release</span>
+                </div>
+                <div class="space-y-3 text-slate-300 text-sm">
+                    <p class="font-semibold text-pink-400">Fixed:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Maximum Power Save</li>
+                        <li>Deep Sleep Option</li>
+                        <li>Selfie Video</li>
+                        <li>Selfie Portrait</li>
+                        <li>Switch to selfie while recording a video</li>
+                        <li>48mp Camera</li>
+                        <li>Camera App Crash</li>
+                        <li>QR Code Scanner</li>
+                        <li>Long Tap Detection In Photos</li>
+                        <li>Overheating</li>
+                        <li>Regions</li>
+                        <li>SOT</li>
+                        <li>Factory Reset Protection (FRP)</li>
+                    </ul>
+                    <p class="font-semibold text-pink-400 pt-2">Added:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Call Recording</li>
+                        <li>Stock Device Care</li>
+                        <li>Smart Suggestions</li>
+                        <li>FHD/UHD 60 FPS Camera</li>
+                        <li>Micro Camera</li>
+                        <li>Night Mode</li>
+                        <li>Data Usage In QS</li>
+                        <li>Game Booster</li>
+                        <li>Edge Lightning</li>
+                        <li>Network Speed Meter</li>
+                        <li>ROM Info In Settings</li>
+                    </ul>
+                    <p class="font-semibold text-pink-400 pt-2">Patched:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Bootloader & Status Inside "Status Information"</li>
+                        <li>Secure Folder</li>
+                    </ul>
+                    <p class="font-semibold text-pink-400 pt-2">Misc:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Disabled Flag Security</li>
+                        <li>Enabled A2DP By Default</li>
+                        <li>Fully fixed Samsung Camera</li>
+                        <li>Shrink ZIP Size</li>
+                        <li>Shiped With LongKernel 11 June KSUN V3 Enforcing</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Crystal V2.0 -->
+            <div class="glass-panel p-8 space-y-4 changelog-item" data-edition="crystal">
+                <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                    <h3 class="text-2xl font-bold text-pink-500">v2.0 - Crystal Edition</h3>
+                    <span class="text-xs font-mono text-slate-400">Crystal Release</span>
+                </div>
+                <div class="space-y-3 text-slate-300 text-sm">
+                    <p class="font-semibold text-pink-400">Fixed:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>KSU Fork Apk</li>
+                        <li>Audio</li>
+                    </ul>
+                    <p class="font-semibold text-pink-400 pt-2">Added:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>S23U Wallpapers</li>
+                        <li>Battery Health</li>
+                        <li>Outdoor Mode</li>
+                        <li>Extra Brightness</li>
+                        <li>Dex</li>
+                        <li>Homeup, Lockstar And FineLock APKs</li>
+                    </ul>
+                    <p class="font-semibold text-pink-400 pt-2">Patched:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Knox</li>
+                        <li>Compatibility</li>
+                    </ul>
+                    <p class="font-semibold text-pink-400 pt-2">Miscs:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Modern Android Splash Screen</li>
+                        <li>ROM Info In Build Number</li>
+                        <li>Prevent Screenshot Detection</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Crystal V1.0 -->
+            <div class="glass-panel p-8 space-y-4 changelog-item" data-edition="crystal">
+                <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                    <h3 class="text-2xl font-bold text-pink-500">v1.0 - Crystal Edition</h3>
+                    <span class="text-xs font-mono text-slate-400">Crystal Release</span>
+                </div>
+                <div class="space-y-3 text-slate-300 text-sm">
+                    <p class="font-semibold text-pink-400">Fixed:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>SSRM warning</li>
+                        <li>vendor mismatch warning</li>
+                        <li>NFC | FOD | Volte</li>
+                        <li>Dual Sim</li>
+                        <li>Overlay</li>
+                        <li>OMX</li>
+                        <li>Portrait</li>
+                        <li>Object Capture</li>
+                        <li>LockScreen Delay</li>
+                        <li>Hyperlarpse UHD</li>
+                    </ul>
+                    <p class="font-semibold text-pink-400 pt-2">Added:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Full Galaxy AI</li>
+                        <li>Call Recording</li>
+                        <li>HD/FHD 60 + 120 FPS Video</li>
+                        <li>Micro/Night Mode/Food</li>
+                        <li>All TTS</li>
+                        <li>AppLock + Stock Device Care</li>
+                        <li>Now Brief</li>
+                    </ul>
+                    <p class="font-semibold text-pink-400 pt-2">Miscs:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Turned Live Blur Off</li>
+                        <li>Patched Device Status</li>
+                        <li>Patched Secure Folder</li>
+                        <li>Patched Flag Security</li>
+                        <li>Enabled A2DP By Default</li>
+                        <li>Faster FOD</li>
+                        <li>FRP Bypass</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Vanilla V1.0 -->
+            <div class="glass-panel p-8 space-y-4 changelog-item" data-edition="vanilla">
+                <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                    <h3 class="text-2xl font-bold text-pink-500">v1.0 - Vanilla Edition</h3>
+                    <span class="text-xs font-mono text-slate-400">Vanilla Release</span>
+                </div>
+                <div class="space-y-3 text-slate-300 text-sm">
+                    <p class="font-semibold text-pink-400">Fixed:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Notch</li>
+                        <li>Vendor Mismatch</li>
+                        <li>SSRM Warning</li>
+                        <li>Recent Apps Goes Black</li>
+                        <li>Force Restart</li>
+                        <li>NFC</li>
+                        <li>Hyperlapse</li>
+                        <li>Camera Crash After 1 Pic</li>
+                        <li>Night Mode</li>
+                        <li>Zoom In Camera</li>
+                        <li>BT Calling</li>
+                    </ul>
+                    <p class="font-semibold text-pink-400 pt-2">Added:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>S21 Ultra Wallpapers</li>
+                        <li>HighEnd Animation</li>
+                        <li>Macro + Night + Food Camera Modes</li>
+                        <li>Pro Video FHD 120 FPS</li>
+                        <li>Pro Video UHD 60 FPS</li>
+                        <li>Video UHD 60 FPS Support</li>
+                        <li>Special Edition Wallpapers</li>
+                        <li>Network Speedmeter</li>
+                    </ul>
+                    <p class="font-semibold text-pink-400 pt-2">Miscs:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Live Blur Is Off</li>
+                        <li>Uninstallable Samsung Messages</li>
+                        <li>Outdoor Mode</li>
+                        <li>Battery Health</li>
+                        <li>Extra Brightness</li>
+                        <li>Modern Android Splash Screen</li>
+                        <li>Fully Knox Patch</li>
+                        <li>Prevent Screenshot Detection</li>
+                        <li>AppLock + Stock Device Care</li>
+                    </ul>
+                    <p class="font-semibold text-pink-400 pt-2">Patched:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Secure Folder</li>
+                        <li>Flag Security</li>
+                        <li>Knox</li>
+                    </ul>
+                    <p class="font-semibold text-pink-400 pt-2">Untested:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Smart View</li>
+                        <li>Dex</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Script for Filtering Changelogs -->
+    <script>
+        function switchChangelog(edition, clickedButton) {
+            // 1. Reset all filter buttons style
+            document.querySelectorAll('.changelog-btn').forEach(btn => {
+                btn.className = "changelog-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95";
+            });
+
+            // 2. Apply active pink style to clicked button
+            clickedButton.className = "changelog-btn px-4 py-2 rounded-full text-sm font-bold text-pink-500 bg-pink-950/40 border border-pink-500/50 transition-all duration-300 transform active:scale-95 shadow-lg shadow-pink-900/30";
+
+            // 3. Filter items with animation effect
+            const container = document.getElementById('changelogContainer');
+            container.classList.remove('opacity-100', 'translate-y-0');
+            container.classList.add('opacity-0', 'translate-y-4');
+
+            setTimeout(() => {
+                const items = document.querySelectorAll('.changelog-item');
+                items.forEach(item => {
+                    if (edition === 'all' || item.getAttribute('data-edition') === edition) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+                container.classList.remove('opacity-0', 'translate-y-4');
+                container.classList.add('opacity-100', 'translate-y-0');
+            }, 200);
+        }
+    </script>
+
+<!-- PAGE 3: SCREENSHOTS -->
+    <main id="screenshotsView" class="view pt-40 pb-20 px-6 max-w-5xl mx-auto text-center">
+        <h2 class="text-4xl font-bold mb-4">Screenshots</h2>
+        <p class="text-slate-400 mb-8 text-sm">Visual tour of the customized One UI system interface.</p>
+
+        <!-- Smaller Edition Selector Options -->
+        <div class="flex justify-center items-center gap-3 mb-10">
+            <button onclick="switchEdition('vanilla', this)" class="edition-btn px-4 py-2 rounded-full text-sm font-bold text-pink-500 bg-pink-950/40 border border-pink-500/50 transition-all duration-300 transform active:scale-95 shadow-lg shadow-pink-900/30">Vanilla Edition</button>
+            <button onclick="switchEdition('crystal', this)" class="edition-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Crystal Edition</button>
+            <button onclick="switchEdition('standard', this)" class="edition-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Standard Edition</button>
+        </div>
+
+        <!-- Screenshot Grid with 1080x2400 Aspect Ratio, Top Camera Dot & Reduced Rounded Corners -->
+        <div id="screenshotGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-6 transition-all duration-300 opacity-100 transform translate-y-0">
+            <div class="glass-panel aspect-[9/20] w-full flex items-center justify-center overflow-hidden p-2 relative rounded-2xl">
+                <!-- Top Center Camera Dot -->
+                <div class="absolute top-3 left-1/2 transform -translate-x-1/2 w-3.5 h-3.5 bg-black/90 rounded-full z-10 border border-white/10"></div>
+                <img id="screenshot1" src="images/vanilla-1.jpg" alt="Vanilla Edition Screenshot 1" class="w-full h-full object-cover rounded-xl">
+            </div>
+            <div class="glass-panel aspect-[9/20] w-full flex items-center justify-center overflow-hidden p-2 relative rounded-2xl">
+                <!-- Top Center Camera Dot -->
+                <div class="absolute top-3 left-1/2 transform -translate-x-1/2 w-3.5 h-3.5 bg-black/90 rounded-full z-10 border border-white/10"></div>
+                <img id="screenshot2" src="images/vanilla-2.jpg" alt="Vanilla Edition Screenshot 2" class="w-full h-full object-cover rounded-xl">
+            </div>
+            <div class="glass-panel aspect-[9/20] w-full flex items-center justify-center overflow-hidden p-2 relative rounded-2xl">
+                <!-- Top Center Camera Dot -->
+                <div class="absolute top-3 left-1/2 transform -translate-x-1/2 w-3.5 h-3.5 bg-black/90 rounded-full z-10 border border-white/10"></div>
+                <img id="screenshot3" src="images/vanilla-3.jpg" alt="Vanilla Edition Screenshot 3" class="w-full h-full object-cover rounded-xl">
+            </div>
+        </div>
+    </main>
+
+    <!-- Script with Edition Switching Logic -->
+    <script>
+        function switchEdition(edition, clickedButton) {
+            const data = {
+                vanilla: {
+                    images: ["images/vanilla-1.jpg", "images/vanilla-2.jpg", "images/vanilla-3.jpg"],
+                    name: "Vanilla Edition"
+                },
+                crystal: {
+                    images: ["images/crystal-1.jpg", "images/crystal-2.jpg", "images/crystal-3.jpg"],
+                    name: "Crystal Edition"
+                },
+                standard: {
+                    images: ["images/standard-1.jpg", "images/standard-2.jpg", "images/standard-3.jpg"],
+                    name: "Standard Edition"
+                }
+            };
+
+            // 1. Reset all buttons to inactive style
+            document.querySelectorAll('.edition-btn').forEach(btn => {
+                btn.className = "edition-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95";
+            });
+
+            // 2. Apply active pink style to the clicked button
+            clickedButton.className = "edition-btn px-4 py-2 rounded-full text-sm font-bold text-pink-500 bg-pink-950/40 border border-pink-500/50 transition-all duration-300 transform active:scale-95 shadow-lg shadow-pink-900/30";
+
+            // 3. Animate out the grid
+            const grid = document.getElementById('screenshotGrid');
+            grid.classList.remove('opacity-100', 'translate-y-0');
+            grid.classList.add('opacity-0', 'translate-y-4');
+
+            // 4. Change images, alt texts, and animate back in
+            setTimeout(() => {
+                const currentData = data[edition];
+                if (currentData) {
+                    const img1 = document.getElementById('screenshot1');
+                    const img2 = document.getElementById('screenshot2');
+                    const img3 = document.getElementById('screenshot3');
+
+                    img1.src = currentData.images[0];
+                    img1.alt = `${currentData.name} Screenshot 1`;
+
+                    img2.src = currentData.images[1];
+                    img2.alt = `${currentData.name} Screenshot 2`;
+
+                    img3.src = currentData.images[2];
+                    img3.alt = `${currentData.name} Screenshot 3`;
+                }
+                grid.classList.remove('opacity-0', 'translate-y-4');
+                grid.classList.add('opacity-100', 'translate-y-0');
+            }, 200);
+        }
+    </script>
+    <!-- VERSION SELECTION MODAL -->
+    <div id="versionModal" class="fixed inset-0 z-[200] hidden items-center justify-center bg-black/80 backdrop-blur-md p-4">
+        <div class="glass-panel max-w-md w-full p-6 space-y-6 relative border border-white/10 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                <div>
+                    <h3 id="modalDeviceTitle" class="text-xl font-bold">Select Edition</h3>
+                    <p id="modalDeviceSub" class="text-xs text-slate-400 font-mono"></p>
+                </div>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white text-xl">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+
+            <!-- Note Alert Box for SM-A356E Vanilla Edition -->
+            <div id="vanillaNotice" class="hidden p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs space-y-1.5">
+                <div class="font-bold uppercase tracking-wider flex items-center gap-1.5 text-amber-400">
+                    <i class="ph-bold ph-info text-base"></i> Edition Notice
+                </div>
+                <p class="text-slate-300 leading-relaxed">
+                    • This Base Is Spin-Off From Vanilla Edition Ui7, But A356E Bootloader Is Locked At Ui8.0
+                </p>
+            </div>
+
+            <div class="space-y-3">
+                <!-- Edition Option 1 -->
+                <button onclick="selectVersion('standard')" class="w-full text-left p-4 rounded-xl bg-white/5 border border-white/10 hover:border-pink-500/50 hover:bg-pink-500/5 transition-all flex items-center justify-between group">
+                    <div>
+                        <div class="font-bold text-sm text-slate-200 group-hover:text-pink-400 transition-colors">Vought Project - A35 5G</div>
+                        <div class="text-xs text-slate-400">Smooth OneUI 8.5 Base</div>
+                    </div>
+                    <i class="ph-bold ph-caret-right text-slate-500 group-hover:text-pink-400 group-hover:translate-x-1 transition-all"></i>
+                </button>
+
+                <!-- Edition Option 2 -->
+                <button onclick="selectVersion('vanilla')" class="w-full text-left p-4 rounded-xl bg-white/5 border border-white/10 hover:border-pink-500/50 hover:bg-pink-500/5 transition-all flex items-center justify-between group">
+                    <div>
+                        <div id="vanillaOptionTitle" class="font-bold text-sm text-slate-200 group-hover:text-pink-400 transition-colors">Vought Project - Vanilla Edition</div>
+                        <div class="text-xs text-slate-400">Smoothest Experince With S21FE OneUI 7.0 Base</div>
+                    </div>
+                    <i class="ph-bold ph-caret-right text-slate-500 group-hover:text-pink-400 group-hover:translate-x-1 transition-all"></i>
+                </button>
+
+                <!-- Edition Option 3 -->
+                <button onclick="selectVersion('crystal')" class="w-full text-left p-4 rounded-xl bg-white/5 border border-white/10 hover:border-pink-500/50 hover:bg-pink-500/5 transition-all flex items-center justify-between group">
+                    <div>
+                        <div class="font-bold text-sm text-slate-200 group-hover:text-pink-400 transition-colors">Vought Project - CRYSTAL Edition</div>
+                        <div class="text-xs text-slate-400">Ai + Live Blur S23FE OneUI 8.5 Base</div>
+                    </div>
+                    <i class="ph-bold ph-caret-right text-slate-500 group-hover:text-pink-400 group-hover:translate-x-1 transition-all"></i>
+                </button>
+            </div>
+
+            <div id="downloadActionContainer" class="hidden border-t border-white/10 pt-4">
+                <a id="modalDownloadBtn" href="#" target="_blank" class="w-full py-3 rounded-xl bg-gradient-to-r from-pink-500 to-orange-500 text-white font-semibold text-sm shadow-lg hover:opacity-90 transition-all text-center flex items-center justify-center gap-2">
+                    <i class="ph-bold ph-download-simple"></i> Proceed to Download
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Modal State
+        let currentDeviceId = null;
+
+        const deviceData = {
+            a12s: {
+                title: "Galaxy A12s",
+                sub: "SM-A127F/M",
+                downloads: {
+                    standard: "https://drive.google.com/file/d/1Wv0bVk7CFy-_-mNPvH7_KyZYu2YOpHuf/view?usp=drive_link",
+                    vanilla: "https://drive.google.com/file/d/1zty5AoDNi-1WQiCcTtEni4iSVHvfDI8Y/view?usp=drive_link",
+                    crystal: "https://drive.google.com/file/d/1BcXI_JqJAF3SuWK5d84zu7wq1P_JVP8U/view?usp=drive_link"
+                }
+            },
+            a356e: {
+                title: "Galaxy A35 5G",
+                sub: "SM-A356E",
+                downloads: {
+                    standard: "https://drive.usercontent.google.com/download?id=1-gR16n_KwESMdWgkBjr2qsNMMkkItNV9",
+                    vanilla: "#",
+                    crystal: "https://pixeldrain.com/u/b4N7jaAe"
+                }
+            },
+            a51: {
+                title: "Galaxy A51",
+                sub: "SM-A515F/M",
+                downloads: {
+                    standard: "https://drive.usercontent.google.com/download?id=1BirHvG1dy92tsBRYtzNKA_1IBD7GMeBi",
+                    vanilla: "https://drive.usercontent.google.com/download?id=1NXuqqWG6F9X5M8SagEqSIUjDSj8aGyNF",
+                    crystal: "https://drive.usercontent.google.com/download?id=1uZPnyWasHPIpXWirpSytB_xns0TzxLi5"
+                }
+            }
+        };
+
+        function openVersionModal(deviceId) {
+            currentDeviceId = deviceId;
+            const data = deviceData[deviceId];
+
+            document.getElementById('modalDeviceTitle').innerText = data.title;
+            document.getElementById('modalDeviceSub').innerText = data.sub;
+
+            // Dynamically change option title based on device
+            const vanillaTitle = document.getElementById('vanillaOptionTitle');
+            if (deviceId === 'a356e') {
+                vanillaTitle.innerText = "Vought Project - Vanilla Extended";
+            } else {
+                vanillaTitle.innerText = "Vought Project - Vanilla Edition";
+            }
+
+            document.getElementById('vanillaNotice').classList.add('hidden');
+            document.getElementById('downloadActionContainer').classList.add('hidden');
+
+            const modal = document.getElementById('versionModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('versionModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.getElementById('vanillaNotice').classList.add('hidden');
+            document.getElementById('downloadActionContainer').classList.add('hidden');
+        }
+
+        function selectVersion(versionType) {
+            const noticeEl = document.getElementById('vanillaNotice');
+            const downloadBtn = document.getElementById('modalDownloadBtn');
+            const actionContainer = document.getElementById('downloadActionContainer');
+
+            // Show note specifically for A356E Vanilla edition
+            if (currentDeviceId === 'a356e' && versionType === 'vanilla') {
+                noticeEl.classList.remove('hidden');
+            } else {
+                noticeEl.classList.add('hidden');
+            }
+
+            const downloadUrl = deviceData[currentDeviceId].downloads[versionType];
+
+            if (downloadUrl === "#") {
+                downloadBtn.innerText = "Coming Soon";
+                downloadBtn.removeAttribute("href");
+                downloadBtn.classList.add("opacity-50", "pointer-events-none");
+            } else {
+                downloadBtn.innerText = "Proceed to Download";
+                downloadBtn.setAttribute("href", downloadUrl);
+                downloadBtn.classList.remove("opacity-50", "pointer-events-none");
+            }
+
+            actionContainer.classList.remove('hidden');
+        }
+
+        function switchView(viewName) {
+            document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(viewName + 'View').classList.add('active');
+
+            const activeBtn = document.getElementById('nav-' + viewName);
+            if (activeBtn) activeBtn.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(initScrollObserver, 100);
+        }
+
+        let revealObserver;
+        function initScrollObserver() {
+            if (revealObserver) revealObserver.disconnect();
+
+            revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -40px 0px'
+            });
+
+            document.querySelectorAll('.reveal').forEach(element => {
+                revealObserver.observe(element);
+            });
+        }
+
+        // Global Star Background Canvas
+        const canvas = document.getElementById('starCanvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            stars = [];
+            for (let i = 0; i < 180; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 1.5,
+                    opacity: Math.random(),
+                    speed: (Math.random() * 0.02) + 0.005,
+                    twinkleSpeed: (Math.random() * 0.03) + 0.01
+                });
+            }
+        }
+
+        function animateStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            stars.forEach(star => {
+                star.y -= star.speed;
+                if (star.y < 0) {
+                    star.y = canvas.height;
+                    star.x = Math.random() * canvas.width;
+                }
+
+                star.opacity += star.twinkleSpeed;
+                if (star.opacity > 1 || star.opacity < 0.2) {
+                    star.twinkleSpeed = -star.twinkleSpeed;
+                }
+
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+                ctx.fill();
+            });
+
+            requestAnimationFrame(animateStars);
+        }
+
+        // Dedicated Feature Grid Canvas Particle Animation
+        const fCanvas = document.getElementById('featureCanvas');
+        const fCtx = fCanvas.getContext('2d');
+        let featureParticles = [];
+
+        function initFeatureCanvas() {
+            const wrapper = fCanvas.parentElement;
+            fCanvas.width = wrapper.clientWidth;
+            fCanvas.height = wrapper.clientHeight;
+            featureParticles = [];
+
+            const colors = ['rgba(255, 65, 108, ', 'rgba(255, 75, 43, ', 'rgba(56, 189, 248, '];
+
+            for (let i = 0; i < 40; i++) {
+                featureParticles.push({
+                    x: Math.random() * fCanvas.width,
+                    y: Math.random() * fCanvas.height,
+                    radius: Math.random() * 2 + 1,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    vx: (Math.random() - 0.5) * 0.8,
+                    vy: (Math.random() - 0.5) * 0.8,
+                    alpha: Math.random() * 0.5 + 0.2
+                });
+            }
+        }
+
+        function animateFeatureCanvas() {
+            fCtx.clearRect(0, 0, fCanvas.width, fCanvas.height);
+
+            featureParticles.forEach((p, index) => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0 || p.x > fCanvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > fCanvas.height) p.vy *= -1;
+
+                fCtx.beginPath();
+                fCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                fCtx.fillStyle = p.color + p.alpha + ')';
+                fCtx.fill();
+
+                // Connect nearby particles
+                for (let j = index + 1; j < featureParticles.length; j++) {
+                    const p2 = featureParticles[j];
+                    const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    if (dist < 100) {
+                        fCtx.beginPath();
+                        fCtx.moveTo(p.x, p.y);
+                        fCtx.lineTo(p2.x, p2.y);
+                        fCtx.strokeStyle = `rgba(255, 255, 255, ${0.1 * (1 - dist / 100)})`;
+                        fCtx.lineWidth = 0.5;
+                        fCtx.stroke();
+                    }
+                }
+            });
+
+            requestAnimationFrame(animateFeatureCanvas);
+        }
+
+        window.addEventListener('resize', () => {
+            initCanvas();
+            initFeatureCanvas();
+        });
+
+        window.onload = () => {
+            initCanvas();
+            animateStars();
+            initFeatureCanvas();
+            animateFeatureCanvas();
+            initScrollObserver();
+        };
+    </script>
+</body>
+</html>
