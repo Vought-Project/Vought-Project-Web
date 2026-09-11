@@ -10,7 +10,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> <!-- Note: using Tailwind play CDN or standard v3 CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
@@ -168,32 +167,16 @@
 
     <canvas id="starCanvas"></canvas>
 
-    <!-- Navigation Bar (Updated with Mobile Dropdown Menu) -->
-    <nav class="fixed top-4 left-1/2 -translate-x-1/2 z-[100] w-[92%] max-w-5xl glass-panel px-5 py-3 flex flex-col md:flex-row items-center justify-between transition-all duration-300">
-        <div class="w-full flex items-center justify-between">
-            <div class="font-heading font-bold text-base sm:text-lg tracking-wider cursor-pointer flex items-center gap-3" onclick="switchView('home'); closeMobileMenu();">
-                <span class="w-2.5 h-2.5 rounded-full bg-pink-500 shadow-[0_0_12px_#ff416c]"></span>
-                <span>VOUGHT<span class="text-slate-400 font-normal"> PROJECT</span></span>
-            </div>
-            
-            <!-- Desktop Nav Buttons (Hidden on Mobile) -->
-            <div class="hidden md:flex gap-1 bg-white/5 p-1 rounded-2xl border border-white/5">
-                <button id="nav-home" onclick="switchView('home')" class="nav-btn active">Home</button>
-                <button id="nav-changelog" onclick="switchView('changelog')" class="nav-btn">Changelog</button>
-                <button id="nav-screenshots" onclick="switchView('screenshots')" class="nav-btn">Screenshots</button>
-            </div>
-
-            <!-- Mobile Menu Hamburger Button -->
-            <button onclick="toggleMobileMenu()" class="md:hidden text-slate-300 hover:text-white p-2 text-xl focus:outline-none" aria-label="Toggle Menu">
-                <i id="menuIcon" class="ph-bold ph-list"></i>
-            </button>
+    <!-- Navigation Bar -->
+    <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] w-[92%] max-w-5xl glass-panel px-6 py-3 flex items-center justify-between">
+        <div class="font-heading font-bold text-lg tracking-wider cursor-pointer flex items-center gap-3" onclick="switchView('home')">
+            <span class="w-2.5 h-2.5 rounded-full bg-pink-500 shadow-[0_0_12x_#ff416c]"></span>
+            <span>VOUGHT<span class="w-2.5 h-2.5 shadow-[0_0_12x_#ff416c]"> PROJECT</span></span>
         </div>
-
-        <!-- Mobile Dropdown Drawer (Hidden by default) -->
-        <div id="mobileMenu" class="hidden w-full flex flex-col gap-2 pt-4 mt-3 border-t border-white/10 md:hidden">
-            <button id="mob-nav-home" onclick="switchView('home'); closeMobileMenu();" class="nav-btn text-left w-full py-2.5 px-4 rounded-xl active">Home</button>
-            <button id="mob-nav-changelog" onclick="switchView('changelog'); closeMobileMenu();" class="nav-btn text-left w-full py-2.5 px-4 rounded-xl">Changelog</button>
-            <button id="mob-nav-screenshots" onclick="switchView('screenshots'); closeMobileMenu();" class="nav-btn text-left w-full py-2.5 px-4 rounded-xl">Screenshots</button>
+        <div class="flex gap-1 bg-white/5 p-1 rounded-2xl border border-white/5">
+            <button id="nav-home" onclick="switchView('home')" class="nav-btn active">Home</button>
+            <button id="nav-changelog" onclick="switchView('changelog')" class="nav-btn">Changelog</button>
+            <button id="nav-screenshots" onclick="switchView('screenshots')" class="nav-btn">Screenshots</button>
         </div>
     </nav>
 
@@ -669,6 +652,37 @@
         </div>
     </main>
 
+    <!-- Script for Filtering Changelogs -->
+    <script>
+        function switchChangelog(edition, clickedButton) {
+            // 1. Reset all filter buttons style
+            document.querySelectorAll('.changelog-btn').forEach(btn => {
+                btn.className = "changelog-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95";
+            });
+
+            // 2. Apply active pink style to clicked button
+            clickedButton.className = "changelog-btn px-4 py-2 rounded-full text-sm font-bold text-pink-500 bg-pink-950/40 border border-pink-500/50 transition-all duration-300 transform active:scale-95 shadow-lg shadow-pink-900/30";
+
+            // 3. Filter items with animation effect
+            const container = document.getElementById('changelogContainer');
+            container.classList.remove('opacity-100', 'translate-y-0');
+            container.classList.add('opacity-0', 'translate-y-4');
+
+            setTimeout(() => {
+                const items = document.querySelectorAll('.changelog-item');
+                items.forEach(item => {
+                    if (edition === 'all' || item.getAttribute('data-edition') === edition) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+                container.classList.remove('opacity-0', 'translate-y-4');
+                container.classList.add('opacity-100', 'translate-y-0');
+            }, 200);
+        }
+    </script>
+
 <!-- PAGE 3: SCREENSHOTS -->
     <main id="screenshotsView" class="view pt-40 pb-20 px-6 max-w-5xl mx-auto text-center">
         <h2 class="text-4xl font-bold mb-4">Screenshots</h2>
@@ -701,6 +715,59 @@
         </div>
     </main>
 
+    <!-- Script with Edition Switching Logic -->
+    <script>
+        function switchEdition(edition, clickedButton) {
+            const data = {
+                vanilla: {
+                    images: ["images/vanilla-1.jpg", "images/vanilla-2.jpg", "images/vanilla-3.jpg"],
+                    name: "Vanilla Edition"
+                },
+                crystal: {
+                    images: ["images/crystal-1.jpg", "images/crystal-2.jpg", "images/crystal-3.jpg"],
+                    name: "Crystal Edition"
+                },
+                standard: {
+                    images: ["images/standard-1.jpg", "images/standard-2.jpg", "images/standard-3.jpg"],
+                    name: "Standard Edition"
+                }
+            };
+
+            // 1. Reset all buttons to inactive style
+            document.querySelectorAll('.edition-btn').forEach(btn => {
+                btn.className = "edition-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95";
+            });
+
+            // 2. Apply active pink style to the clicked button
+            clickedButton.className = "edition-btn px-4 py-2 rounded-full text-sm font-bold text-pink-500 bg-pink-950/40 border border-pink-500/50 transition-all duration-300 transform active:scale-95 shadow-lg shadow-pink-900/30";
+
+            // 3. Animate out the grid
+            const grid = document.getElementById('screenshotGrid');
+            grid.classList.remove('opacity-100', 'translate-y-0');
+            grid.classList.add('opacity-0', 'translate-y-4');
+
+            // 4. Change images, alt texts, and animate back in
+            setTimeout(() => {
+                const currentData = data[edition];
+                if (currentData) {
+                    const img1 = document.getElementById('screenshot1');
+                    const img2 = document.getElementById('screenshot2');
+                    const img3 = document.getElementById('screenshot3');
+
+                    img1.src = currentData.images[0];
+                    img1.alt = `${currentData.name} Screenshot 1`;
+
+                    img2.src = currentData.images[1];
+                    img2.alt = `${currentData.name} Screenshot 2`;
+
+                    img3.src = currentData.images[2];
+                    img3.alt = `${currentData.name} Screenshot 3`;
+                }
+                grid.classList.remove('opacity-0', 'translate-y-4');
+                grid.classList.add('opacity-100', 'translate-y-0');
+            }, 200);
+        }
+    </script>
     <!-- VERSION SELECTION MODAL -->
     <div id="versionModal" class="fixed inset-0 z-[200] hidden items-center justify-center bg-black/80 backdrop-blur-md p-4">
         <div class="glass-panel max-w-md w-full p-6 space-y-6 relative border border-white/10 shadow-2xl">
@@ -763,30 +830,6 @@
 
     <!-- Scripts -->
     <script>
-        // Mobile Navigation Menu Logic
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const icon = document.getElementById('menuIcon');
-            
-            if (menu.classList.contains('hidden')) {
-                menu.classList.remove('hidden');
-                icon.classList.remove('ph-list');
-                icon.classList.add('ph-x');
-            } else {
-                closeMobileMenu();
-            }
-        }
-
-        function closeMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const icon = document.getElementById('menuIcon');
-            if(menu) menu.classList.add('hidden');
-            if(icon) {
-                icon.classList.remove('ph-x');
-                icon.classList.add('ph-list');
-            }
-        }
-
         // Modal State
         let currentDeviceId = null;
 
@@ -827,6 +870,7 @@
             document.getElementById('modalDeviceTitle').innerText = data.title;
             document.getElementById('modalDeviceSub').innerText = data.sub;
 
+            // Dynamically change option title based on device
             const vanillaTitle = document.getElementById('vanillaOptionTitle');
             if (deviceId === 'a356e') {
                 vanillaTitle.innerText = "Vought Project - Vanilla Extended";
@@ -855,6 +899,7 @@
             const downloadBtn = document.getElementById('modalDownloadBtn');
             const actionContainer = document.getElementById('downloadActionContainer');
 
+            // Show note specifically for A356E Vanilla edition
             if (currentDeviceId === 'a356e' && versionType === 'vanilla') {
                 noticeEl.classList.remove('hidden');
             } else {
@@ -882,12 +927,8 @@
 
             document.getElementById(viewName + 'View').classList.add('active');
 
-            // Sync both desktop and mobile buttons active state
             const activeBtn = document.getElementById('nav-' + viewName);
-            const mobActiveBtn = document.getElementById('mob-nav-' + viewName);
-            
             if (activeBtn) activeBtn.classList.add('active');
-            if (mobActiveBtn) mobActiveBtn.classList.add('active');
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
             setTimeout(initScrollObserver, 100);
@@ -1000,6 +1041,7 @@
                 fCtx.fillStyle = p.color + p.alpha + ')';
                 fCtx.fill();
 
+                // Connect nearby particles
                 for (let j = index + 1; j < featureParticles.length; j++) {
                     const p2 = featureParticles[j];
                     const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
@@ -1015,80 +1057,6 @@
             });
 
             requestAnimationFrame(animateFeatureCanvas);
-        }
-
-        // Changelog filter logic
-        function switchChangelog(edition, clickedButton) {
-            document.querySelectorAll('.changelog-btn').forEach(btn => {
-                btn.className = "changelog-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95";
-            });
-
-            clickedButton.className = "changelog-btn px-4 py-2 rounded-full text-sm font-bold text-pink-500 bg-pink-950/40 border border-pink-500/50 transition-all duration-300 transform active:scale-95 shadow-lg shadow-pink-900/30";
-
-            const container = document.getElementById('changelogContainer');
-            container.classList.remove('opacity-100', 'translate-y-0');
-            container.classList.add('opacity-0', 'translate-y-4');
-
-            setTimeout(() => {
-                const items = document.querySelectorAll('.changelog-item');
-                items.forEach(item => {
-                    if (edition === 'all' || item.getAttribute('data-edition') === edition) {
-                        item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-                container.classList.remove('opacity-0', 'translate-y-4');
-                container.classList.add('opacity-100', 'translate-y-0');
-            }, 200);
-        }
-
-        // Screenshot edition filter logic
-        function switchEdition(edition, clickedButton) {
-            const data = {
-                vanilla: {
-                    images: ["images/vanilla-1.jpg", "images/vanilla-2.jpg", "images/vanilla-3.jpg"],
-                    name: "Vanilla Edition"
-                },
-                crystal: {
-                    images: ["images/crystal-1.jpg", "images/crystal-2.jpg", "images/crystal-3.jpg"],
-                    name: "Crystal Edition"
-                },
-                standard: {
-                    images: ["images/standard-1.jpg", "images/standard-2.jpg", "images/standard-3.jpg"],
-                    name: "Standard Edition"
-                }
-            };
-
-            document.querySelectorAll('.edition-btn').forEach(btn => {
-                btn.className = "edition-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95";
-            });
-
-            clickedButton.className = "edition-btn px-4 py-2 rounded-full text-sm font-bold text-pink-500 bg-pink-950/40 border border-pink-500/50 transition-all duration-300 transform active:scale-95 shadow-lg shadow-pink-900/30";
-
-            const grid = document.getElementById('screenshotGrid');
-            grid.classList.remove('opacity-100', 'translate-y-0');
-            grid.classList.add('opacity-0', 'translate-y-4');
-
-            setTimeout(() => {
-                const currentData = data[edition];
-                if (currentData) {
-                    const img1 = document.getElementById('screenshot1');
-                    const img2 = document.getElementById('screenshot2');
-                    const img3 = document.getElementById('screenshot3');
-
-                    img1.src = currentData.images[0];
-                    img1.alt = `${currentData.name} Screenshot 1`;
-
-                    img2.src = currentData.images[1];
-                    img2.alt = `${currentData.name} Screenshot 2`;
-
-                    img3.src = currentData.images[2];
-                    img3.alt = `${currentData.name} Screenshot 3`;
-                }
-                grid.classList.remove('opacity-0', 'translate-y-4');
-                grid.classList.add('opacity-100', 'translate-y-0');
-            }, 200);
         }
 
         window.addEventListener('resize', () => {
