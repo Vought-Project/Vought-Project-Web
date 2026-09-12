@@ -170,8 +170,9 @@
     <!-- Navigation Bar -->
     <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] w-[92%] max-w-5xl glass-panel px-6 py-3 flex items-center justify-between">
         <div class="font-heading font-bold text-lg tracking-wider cursor-pointer flex items-center gap-3" onclick="switchView('home')">
-            <span class="w-2.5 h-2.5 rounded-full bg-pink-500 shadow-[0_0_12x_#ff416c]"></span>
-            <span>VOUGHT<span class="w-2.5 h-2.5 shadow-[0_0_12x_#ff416c]"> PROJECT</span></span>
+            <!-- Custom Logo -->
+            <img src="/images/logo.png" alt="Vought Logo" class="h-12 w-13">
+            <span>VOUGHT PROJECT</span>
         </div>
         <div class="flex gap-1 bg-white/5 p-1 rounded-2xl border border-white/5">
             <button id="nav-home" onclick="switchView('home')" class="nav-btn active">Home</button>
@@ -732,7 +733,7 @@
         }
     </script>
 
-<!-- PAGE 3: SCREENSHOTS -->
+    <!-- PAGE 3: SCREENSHOTS -->
     <main id="screenshotsView" class="view pt-40 pb-20 px-6 max-w-5xl mx-auto text-center">
         <h2 class="text-4xl font-bold mb-4">Screenshots</h2>
         <p class="text-slate-400 mb-8 text-sm">Visual tour of the customized One UI system interface.</p>
@@ -742,7 +743,7 @@
             <button onclick="switchEdition('vanilla', this)" class="edition-btn px-4 py-2 rounded-full text-sm font-bold text-pink-500 bg-pink-950/40 border border-pink-500/50 transition-all duration-300 transform active:scale-95 shadow-lg shadow-pink-900/30">Vanilla Edition</button>
             <button onclick="switchEdition('crystal', this)" class="edition-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Crystal Edition</button>
             <button onclick="switchEdition('standard', this)" class="edition-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Standard Edition</button>
-           <button onclick="switchEdition('cupid', this)" class="edition-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Cupid Edition</button>
+            <button onclick="switchEdition('cupid', this)" class="edition-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Cupid Edition</button>
         </div>
 
         <!-- Screenshot Grid with 1080x2400 Aspect Ratio, Top Camera Dot & Reduced Rounded Corners -->
@@ -776,8 +777,8 @@
                 <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-white/10 p-1">
                     <img src="images/member1.jpg" alt="Team Member 1" class="w-full h-full object-cover rounded-full">
                 </div>
-                <h3 class="text-xl font-bold text-slate-200">Xv2ice</h3>
-                <p class="text-pink-400 text-sm font-semibold mb-2">Lead Developer / Exynos 9611 maintainer</p>
+                <h3 class="text-xl font-bold text-slate-200">Name 1</h3>
+                <p class="text-pink-400 text-sm font-semibold mb-2">Lead Developer</p>
             </div>
 
             <!-- Member 2 -->
@@ -785,8 +786,8 @@
                 <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-white/10 p-1">
                     <img src="images/member2.jpg" alt="Team Member 2" class="w-full h-full object-cover rounded-full">
                 </div>
-                <h3 class="text-xl font-bold text-slate-200">Dai-doz</h3>
-                <p class="text-pink-400 text-sm font-semibold mb-2">Exynos 850 / website maintainer</p>
+                <h3 class="text-xl font-bold text-slate-200">Name 2</h3>
+                <p class="text-pink-400 text-sm font-semibold mb-2">Core Developer</p>
             </div>
 
             <!-- Member 3 -->
@@ -794,8 +795,8 @@
                 <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-white/10 p-1">
                     <img src="images/member3.jpg" alt="Team Member 3" class="w-full h-full object-cover rounded-full">
                 </div>
-                <h3 class="text-xl font-bold text-slate-200">Homelander</h3>
-                <p class="text-pink-400 text-sm font-semibold mb-2">Exynos 1380 maintainer</p>
+                <h3 class="text-xl font-bold text-slate-200">Name 3</h3>
+                <p class="text-pink-400 text-sm font-semibold mb-2">Kernel Maintainer</p>
             </div>
 
             <!-- Member 4 -->
@@ -803,8 +804,8 @@
                 <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-white/10 p-1">
                     <img src="images/member4.jpg" alt="Team Member 4" class="w-full h-full object-cover rounded-full">
                 </div>
-                <h3 class="text-xl font-bold text-slate-200">Ryxx</h3>
-                <p class="text-pink-400 text-sm font-semibold mb-2"> A51 Tester mikuuuuuuuuuuu</p>
+                <h3 class="text-xl font-bold text-slate-200">Name 4</h3>
+                <p class="text-pink-400 text-sm font-semibold mb-2">UI Designer</p>
             </div>
 
             <!-- Member 5 -->
@@ -812,8 +813,8 @@
                 <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-white/10 p-1">
                     <img src="images/member5.jpg" alt="Team Member 5" class="w-full h-full object-cover rounded-full">
                 </div>
-                <h3 class="text-xl font-bold text-slate-200">Freddel</h3>
-                <p class="text-pink-400 text-sm font-semibold mb-2">A51 Tester / QA</p>
+                <h3 class="text-xl font-bold text-slate-200">Name 5</h3>
+                <p class="text-pink-400 text-sm font-semibold mb-2">Tester / QA</p>
             </div>
 
             <!-- Member 6 -->
@@ -821,8 +822,8 @@
                 <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-white/10 p-1">
                     <img src="images/member6.jpg" alt="Team Member 6" class="w-full h-full object-cover rounded-full">
                 </div>
-                <h3 class="text-xl font-bold text-slate-200">Xiatsuma</h3>
-                <p class="text-pink-400 text-sm font-semibold mb-2">A34 tester</p>
+                <h3 class="text-xl font-bold text-slate-200">Name 6</h3>
+                <p class="text-pink-400 text-sm font-semibold mb-2">Community Manager</p>
             </div>
         </div>
     </main>
@@ -884,6 +885,7 @@
             }, 200);
         }
     </script>
+
     <!-- VERSION SELECTION MODAL -->
     <div id="versionModal" class="fixed inset-0 z-[200] hidden items-center justify-center bg-black/80 backdrop-blur-md p-4">
         <div class="glass-panel max-w-md w-full p-6 space-y-6 relative border border-white/10 shadow-2xl">
