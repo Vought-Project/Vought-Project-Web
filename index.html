@@ -44,6 +44,10 @@
             line-height: 1.6;
         }
 
+        /* Hide scrollbars for chrome, safari, opera, IE, Edge, Firefox */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
         h1, h2, h3, h4 { font-family: var(--font-heading); }
 
         #starCanvas {
@@ -91,10 +95,18 @@
             background: transparent;
             color: var(--text-secondary);
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             transition: var(--transition-smooth);
-            padding: 8px 16px;
+            padding: 6px 12px;
             border-radius: 12px;
+            white-space: nowrap;
+        }
+
+        @media (min-width: 640px) {
+            .nav-btn {
+                font-size: 0.85rem;
+                padding: 8px 16px;
+            }
         }
 
         .nav-btn:hover, .nav-btn.active {
@@ -167,14 +179,14 @@
 
     <canvas id="starCanvas"></canvas>
 
-    <!-- Navigation Bar -->
-    <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-[100] w-[92%] max-w-5xl glass-panel px-6 py-3 flex items-center justify-between">
-        <div class="font-heading font-bold text-lg tracking-wider cursor-pointer flex items-center gap-3" onclick="switchView('home')">
+    <!-- Responsive Navigation Bar -->
+    <nav class="fixed top-3 sm:top-6 left-1/2 -translate-x-1/2 z-[100] w-[94%] sm:w-[92%] max-w-5xl glass-panel px-3 sm:px-6 py-2 sm:py-3 flex flex-col md:flex-row items-center justify-between gap-2 sm:gap-4">
+        <div class="font-heading font-bold text-base sm:text-lg tracking-wider cursor-pointer flex items-center gap-2 sm:gap-3" onclick="switchView('home')">
             <!-- Custom Logo -->
-            <img src="images/logo.png" alt="Vought Logo" class="h-12 w-13">
-            <span>VOUGHT PROJECT</span>
+            <img src="images/logo.png" alt="Vought Logo" class="h-8 w-8 sm:h-12 sm:w-12 object-contain">
+            <span class="whitespace-nowrap">VOUGHT PROJECT</span>
         </div>
-        <div class="flex gap-1 bg-white/5 p-1 rounded-2xl border border-white/5">
+        <div class="flex gap-1 bg-white/5 p-1 rounded-2xl border border-white/5 overflow-x-auto max-w-full no-scrollbar">
             <button id="nav-home" onclick="switchView('home')" class="nav-btn active">Home</button>
             <button id="nav-changelog" onclick="switchView('changelog')" class="nav-btn">Changelog</button>
             <button id="nav-screenshots" onclick="switchView('screenshots')" class="nav-btn">Screenshots</button>
@@ -183,53 +195,53 @@
     </nav>
 
     <!-- PAGE 1: HOME -->
-    <main id="homeView" class="view active pt-32 pb-24 px-6 max-w-6xl mx-auto space-y-24">
+    <main id="homeView" class="view active pt-28 sm:pt-36 pb-20 sm:pb-24 px-4 sm:px-6 max-w-6xl mx-auto space-y-16 sm:space-y-24">
 
         <!-- Hero Section -->
-        <section class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center reveal pt-4">
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-center reveal pt-4">
             <div class="lg:col-span-7 space-y-6">
                 <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-400 text-xs font-semibold tracking-wide uppercase">
                     <span class="w-2 h-2 rounded-full bg-pink-500 animate-pulse"></span> One UI 8.5 Ecosystem
                 </div>
 
-                <h1 class="text-5xl sm:text-6xl font-extrabold tracking-tight leading-[1.1]">
+                <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight leading-[1.1]">
                     Unleash raw <br>
                     <span class="gradient-text">efficiency & speed.</span>
                 </h1>
 
-                <p class="text-slate-400 text-base sm:text-lg max-w-xl leading-relaxed">
+                <p class="text-slate-400 text-sm sm:text-lg max-w-xl leading-relaxed">
                     A finely-tuned custom ROM built for Samsung devices. Stripped of bloatware, unlocked for full control, and optimized for extreme performance.
                 </p>
 
-                <div class="flex flex-wrap gap-4 pt-2">
-                    <a href="#devices" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-pink-500 to-orange-500 text-white font-semibold text-sm shadow-[0_10px_25px_rgba(255,65,108,0.3)] hover:shadow-[0_15px_30px_rgba(255,65,108,0.4)] hover:-translate-y-0.5 transition-all flex items-center gap-2">
-                        <i class="ph-bold ph-download-simple text-lg"></i> Get Downloads
+                <div class="flex flex-wrap gap-3 sm:gap-4 pt-2">
+                    <a href="#devices" class="px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl bg-gradient-to-r from-pink-500 to-orange-500 text-white font-semibold text-xs sm:text-sm shadow-[0_10px_25px_rgba(255,65,108,0.3)] hover:shadow-[0_15px_30px_rgba(255,65,108,0.4)] hover:-translate-y-0.5 transition-all flex items-center gap-2">
+                        <i class="ph-bold ph-download-simple text-base sm:text-lg"></i> Get Downloads
                     </a>
-                    <a href="https://t.me/VoughtProject" target="_blank" rel="noopener" class="px-6 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold text-sm hover:-translate-y-0.5 transition-all flex items-center gap-2">
-                        <i class="ph-bold ph-telegram-logo text-lg text-sky-400"></i> Telegram Community
+                    <a href="https://t.me/VoughtProject" target="_blank" rel="noopener" class="px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white font-semibold text-xs sm:text-sm hover:-translate-y-0.5 transition-all flex items-center gap-2">
+                        <i class="ph-bold ph-telegram-logo text-base sm:text-lg text-sky-400"></i> Telegram Community
                     </a>
                 </div>
 
                 <!-- Stats Grid -->
-                <div class="grid grid-cols-3 gap-4 pt-6 border-t border-white/10 max-w-lg">
+                <div class="grid grid-cols-3 gap-2 sm:gap-4 pt-6 border-t border-white/10 max-w-lg">
                     <div>
-                        <div class="text-2xl font-bold font-heading">3 Active</div>
-                        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Dev Builds</div>
+                        <div class="text-xl sm:text-2xl font-bold font-heading">3 Active</div>
+                        <div class="text-[10px] sm:text-xs text-slate-400 font-medium uppercase tracking-wider">Dev Builds</div>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold font-heading">8+ Features</div>
-                        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Kernel Tweak</div>
+                        <div class="text-xl sm:text-2xl font-bold font-heading">8+ Features</div>
+                        <div class="text-[10px] sm:text-xs text-slate-400 font-medium uppercase tracking-wider">Kernel Tweak</div>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold font-heading">8.5 - 8 - 7</div>
-                        <div class="text-xs text-slate-400 font-medium uppercase tracking-wider">Base Version</div>
+                        <div class="text-xl sm:text-2xl font-bold font-heading">8.5 - 8 - 7</div>
+                        <div class="text-[10px] sm:text-xs text-slate-400 font-medium uppercase tracking-wider">Base Version</div>
                     </div>
                 </div>
             </div>
 
             <!-- Hero Feature Display Card -->
             <div class="lg:col-span-5">
-                <div class="glass-panel p-6 relative overflow-hidden space-y-6">
+                <div class="glass-panel p-5 sm:p-6 relative overflow-hidden space-y-6">
                     <div class="flex items-center justify-between border-b border-white/10 pb-4">
                         <div class="flex items-center gap-3">
                             <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
@@ -239,17 +251,17 @@
                     </div>
 
                     <div class="space-y-3 font-mono text-xs">
-                        <div class="p-3 rounded-lg bg-black/40 border border-white/5 flex items-center justify-between">
+                        <div class="p-3 rounded-lg bg-black/40 border border-white/5 flex items-center justify-between gap-2">
                             <span class="text-slate-400">Framework Log</span>
-                            <span class="text-emerald-400">Disabled screenshots detection</span>
+                            <span class="text-emerald-400 text-right">Disabled screenshots detection</span>
                         </div>
-                        <div class="p-3 rounded-lg bg-black/40 border border-white/5 flex items-center justify-between">
+                        <div class="p-3 rounded-lg bg-black/40 border border-white/5 flex items-center justify-between gap-2">
                             <span class="text-slate-400">Safe Overclock</span>
-                            <span class="text-emerald-400">MaowzzaKernel is supported</span>
+                            <span class="text-emerald-400 text-right">MaowzzaKernel supported</span>
                         </div>
-                        <div class="p-3 rounded-lg bg-black/40 border border-white/5 flex items-center justify-between">
+                        <div class="p-3 rounded-lg bg-black/40 border border-white/5 flex items-center justify-between gap-2">
                             <span class="text-slate-400">Secure Folder</span>
-                            <span class="text-emerald-400">Integrated</span>
+                            <span class="text-emerald-400 text-right">Integrated</span>
                         </div>
                     </div>
 
@@ -264,8 +276,8 @@
         <!-- Features Showcase Grid with Canvas Animation -->
         <section class="space-y-8">
             <div class="text-center max-w-2xl mx-auto space-y-3 reveal">
-                <h2 class="text-3xl font-bold">Built for Maximum Capability</h2>
-                <p class="text-slate-400 text-sm">Every core service in OneUI has been optimized, modified, or completely rewritten for raw performance.</p>
+                <h2 class="text-2xl sm:text-3xl font-bold">Built for Maximum Capability</h2>
+                <p class="text-slate-400 text-xs sm:text-sm">Every core service in OneUI has been optimized, modified, or completely rewritten for raw performance.</p>
             </div>
 
             <!-- Animated Container Wrapper -->
@@ -310,8 +322,8 @@
         <section id="devices" class="space-y-8 pt-6">
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-white/10 pb-6 reveal">
                 <div>
-                    <h2 class="text-3xl font-bold">Supported devices</h2>
-                    <p class="text-slate-400 text-sm mt-1">Select your devices platform to download build zips.</p>
+                    <h2 class="text-2xl sm:text-3xl font-bold">Supported devices</h2>
+                    <p class="text-slate-400 text-xs sm:text-sm mt-1">Select your devices platform to download build zips.</p>
                 </div>
                 <span class="text-xs font-mono text-slate-500">UPDATED REGULARLY</span>
             </div>
@@ -367,8 +379,8 @@
         <!-- Setup Instructions Section -->
         <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-6">
             <div class="lg:col-span-5 space-y-4 reveal">
-                <h2 class="text-3xl font-bold">Flashing Instructions</h2>
-                <p class="text-slate-400 text-sm leading-relaxed">
+                <h2 class="text-2xl sm:text-3xl font-bold">Flashing Instructions</h2>
+                <p class="text-slate-400 text-xs sm:text-sm leading-relaxed">
                     Please follow the steps carefully to avoid soft-bricking your device. Make sure you back up critical data before unlocking the bootloader.
                 </p>
 
@@ -382,25 +394,25 @@
                 </div>
             </div>
 
-            <div class="lg:col-span-7 glass-panel p-6 sm:p-8 space-y-6 reveal">
-                <h3 class="text-xl font-bold flex items-center gap-2 border-b border-white/10 pb-4">
+            <div class="lg:col-span-7 glass-panel p-5 sm:p-8 space-y-6 reveal">
+                <h3 class="text-lg sm:text-xl font-bold flex items-center gap-2 border-b border-white/10 pb-4">
                     <i class="ph-bold ph-steps text-pink-500"></i> Installation Guide
                 </h3>
 
                 <div class="space-y-4 text-xs sm:text-sm text-slate-300">
-                    <div class="flex items-start gap-4">
+                    <div class="flex items-start gap-3 sm:gap-4">
                         <span class="w-6 h-6 rounded-md bg-white/10 text-pink-400 font-bold flex items-center justify-center flex-shrink-0 font-mono">1</span>
                         <p>Verify you are on the latest Stock firmware (Check via SamFW) and ensure bootloader is unlocked.</p>
                     </div>
-                    <div class="flex items-start gap-4">
+                    <div class="flex items-start gap-3 sm:gap-4">
                         <span class="w-6 h-6 rounded-md bg-white/10 text-pink-400 font-bold flex items-center justify-center flex-shrink-0 font-mono">2</span>
                         <p>Flash OFOX/TWRP and flash your patched vbmeta using Odin with Auto Reboot unticked.</p>
                     </div>
-                    <div class="flex items-start gap-4">
+                    <div class="flex items-start gap-3 sm:gap-4">
                         <span class="w-6 h-6 rounded-md bg-white/10 text-pink-400 font-bold flex items-center justify-center flex-shrink-0 font-mono">3</span>
                         <p>Reboot into custom recovery, flash <a href="https://t.me/VoughtProject/8815/8929" target="_blank" class="text-pink-400 underline underline-offset-2">repartition.zip</a>, restart recovery, then wipe data & system partitions [Repartition for A127X].</p>
                     </div>
-                    <div class="flex items-start gap-4">
+                    <div class="flex items-start gap-3 sm:gap-4">
                         <span class="w-6 h-6 rounded-md bg-white/10 text-pink-400 font-bold flex items-center justify-center flex-shrink-0 font-mono">4</span>
                         <p>Sideload or install the ROM zip, format data, then reboot system!</p>
                     </div>
@@ -411,29 +423,29 @@
     </main>
 
     <!-- PAGE 2: CHANGELOG -->
-    <main id="changelogView" class="view pt-40 pb-20 px-6 max-w-4xl mx-auto">
-        <h2 class="text-4xl font-bold mb-4 text-center">Changelog</h2>
-        <p class="text-slate-400 mb-8 text-sm text-center">Release history and update logs sorted by editions.</p>
+    <main id="changelogView" class="view pt-28 sm:pt-36 pb-20 px-4 sm:px-6 max-w-4xl mx-auto">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4 text-center">Changelog</h2>
+        <p class="text-slate-400 mb-6 sm:mb-8 text-xs sm:text-sm text-center">Release history and update logs sorted by editions.</p>
 
         <!-- Edition Selector Options for Changelog -->
-        <div class="flex justify-center items-center gap-3 mb-10 flex-wrap">
-            <button onclick="switchChangelog('all', this)" class="changelog-btn px-4 py-2 rounded-full text-sm font-bold text-pink-500 bg-pink-950/40 border border-pink-500/50 transition-all duration-300 transform active:scale-95 shadow-lg shadow-pink-900/30">All Editions</button>
-            <button onclick="switchChangelog('vanilla', this)" class="changelog-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Vanilla Edition</button>
-            <button onclick="switchChangelog('crystal', this)" class="changelog-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Crystal Edition</button>
-            <button onclick="switchChangelog('standard', this)" class="changelog-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Standard Edition</button>
-            <button onclick="switchChangelog('cupid', this)" class="changelog-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Cupid Edition</button>
+        <div class="flex justify-center items-center gap-2 sm:gap-3 mb-8 sm:mb-10 flex-wrap">
+            <button onclick="switchChangelog('all', this)" class="changelog-btn px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold text-pink-500 bg-pink-950/40 border border-pink-500/50 transition-all duration-300 transform active:scale-95 shadow-lg shadow-pink-900/30">All Editions</button>
+            <button onclick="switchChangelog('vanilla', this)" class="changelog-btn px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Vanilla Edition</button>
+            <button onclick="switchChangelog('crystal', this)" class="changelog-btn px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Crystal Edition</button>
+            <button onclick="switchChangelog('standard', this)" class="changelog-btn px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Standard Edition</button>
+            <button onclick="switchChangelog('cupid', this)" class="changelog-btn px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Cupid Edition</button>
         </div>
 
         <!-- Changelog Container Grid/List -->
         <div id="changelogContainer" class="space-y-6 transition-all duration-300 opacity-100 transform translate-y-0">
 
             <!-- Standard V3.0 -->
-            <div class="glass-panel p-8 space-y-4 changelog-item" data-edition="standard">
+            <div class="glass-panel p-5 sm:p-8 space-y-4 changelog-item" data-edition="standard">
                 <div class="flex items-center justify-between border-b border-white/10 pb-4">
-                    <h3 class="text-2xl font-bold text-pink-500">v3.0 - Standard Edition</h3>
+                    <h3 class="text-xl sm:text-2xl font-bold text-pink-500">v3.0 - Standard Edition</h3>
                     <span class="text-xs font-mono text-slate-400">Standard Release</span>
                 </div>
-                <div class="space-y-3 text-slate-300 text-sm">
+                <div class="space-y-3 text-slate-300 text-xs sm:text-sm">
                     <p class="font-semibold text-pink-400">Fixed:</p>
                     <ul class="list-disc pl-5 space-y-1">
                         <li>SSRM</li>
@@ -464,12 +476,12 @@
             </div>
 
             <!-- Standard V2.0 -->
-            <div class="glass-panel p-8 space-y-4 changelog-item" data-edition="standard">
+            <div class="glass-panel p-5 sm:p-8 space-y-4 changelog-item" data-edition="standard">
                 <div class="flex items-center justify-between border-b border-white/10 pb-4">
-                    <h3 class="text-2xl font-bold text-pink-500">v2.0 - Standard Edition</h3>
+                    <h3 class="text-xl sm:text-2xl font-bold text-pink-500">v2.0 - Standard Edition</h3>
                     <span class="text-xs font-mono text-slate-400">Standard Release</span>
                 </div>
-                <div class="space-y-3 text-slate-300 text-sm">
+                <div class="space-y-3 text-slate-300 text-xs sm:text-sm">
                     <p class="font-semibold text-pink-400">Fixed:</p>
                     <ul class="list-disc pl-5 space-y-1">
                         <li>Maximum Power Save</li>
@@ -517,12 +529,12 @@
             </div>
 
             <!-- Crystal V2.0 -->
-            <div class="glass-panel p-8 space-y-4 changelog-item" data-edition="crystal">
+            <div class="glass-panel p-5 sm:p-8 space-y-4 changelog-item" data-edition="crystal">
                 <div class="flex items-center justify-between border-b border-white/10 pb-4">
-                    <h3 class="text-2xl font-bold text-pink-500">v2.0 - Crystal Edition</h3>
+                    <h3 class="text-xl sm:text-2xl font-bold text-pink-500">v2.0 - Crystal Edition</h3>
                     <span class="text-xs font-mono text-slate-400">Crystal Release</span>
                 </div>
-                <div class="space-y-3 text-slate-300 text-sm">
+                <div class="space-y-3 text-slate-300 text-xs sm:text-sm">
                     <p class="font-semibold text-pink-400">Fixed:</p>
                     <ul class="list-disc pl-5 space-y-1">
                         <li>KSU Fork Apk</li>
@@ -552,12 +564,12 @@
             </div>
 
             <!-- Crystal V1.0 -->
-            <div class="glass-panel p-8 space-y-4 changelog-item" data-edition="crystal">
+            <div class="glass-panel p-5 sm:p-8 space-y-4 changelog-item" data-edition="crystal">
                 <div class="flex items-center justify-between border-b border-white/10 pb-4">
-                    <h3 class="text-2xl font-bold text-pink-500">v1.0 - Crystal Edition</h3>
+                    <h3 class="text-xl sm:text-2xl font-bold text-pink-500">v1.0 - Crystal Edition</h3>
                     <span class="text-xs font-mono text-slate-400">Crystal Release</span>
                 </div>
-                <div class="space-y-3 text-slate-300 text-sm">
+                <div class="space-y-3 text-slate-300 text-xs sm:text-sm">
                     <p class="font-semibold text-pink-400">Fixed:</p>
                     <ul class="list-disc pl-5 space-y-1">
                         <li>SSRM warning</li>
@@ -595,12 +607,12 @@
             </div>
 
             <!-- Vanilla V1.0 -->
-            <div class="glass-panel p-8 space-y-4 changelog-item" data-edition="vanilla">
+            <div class="glass-panel p-5 sm:p-8 space-y-4 changelog-item" data-edition="vanilla">
                 <div class="flex items-center justify-between border-b border-white/10 pb-4">
-                    <h3 class="text-2xl font-bold text-pink-500">v1.0 - Vanilla Edition</h3>
+                    <h3 class="text-xl sm:text-2xl font-bold text-pink-500">v1.0 - Vanilla Edition</h3>
                     <span class="text-xs font-mono text-slate-400">Vanilla Release</span>
                 </div>
-                <div class="space-y-3 text-slate-300 text-sm">
+                <div class="space-y-3 text-slate-300 text-xs sm:text-sm">
                     <p class="font-semibold text-pink-400">Fixed:</p>
                     <ul class="list-disc pl-5 space-y-1">
                         <li>Notch</li>
@@ -653,12 +665,12 @@
             </div>
 
             <!-- Cupid V1.0 -->
-            <div class="glass-panel p-8 space-y-4 changelog-item" data-edition="cupid">
+            <div class="glass-panel p-5 sm:p-8 space-y-4 changelog-item" data-edition="cupid">
                 <div class="flex items-center justify-between border-b border-white/10 pb-4">
-                    <h3 class="text-2xl font-bold text-pink-500">v1.0 - Cupid Edition</h3>
+                    <h3 class="text-xl sm:text-2xl font-bold text-pink-500">v1.0 - Cupid Edition</h3>
                     <span class="text-xs font-mono text-slate-400">Cupid Release</span>
                 </div>
-                <div class="space-y-3 text-slate-300 text-sm">
+                <div class="space-y-3 text-slate-300 text-xs sm:text-sm">
                     <p class="font-semibold text-pink-400">Fixed:</p>
                     <ul class="list-disc pl-5 space-y-1">
                         <li>SSRM warning</li>
@@ -705,15 +717,12 @@
     <!-- Script for Filtering Changelogs -->
     <script>
         function switchChangelog(edition, clickedButton) {
-            // 1. Reset all filter buttons style
             document.querySelectorAll('.changelog-btn').forEach(btn => {
-                btn.className = "changelog-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95";
+                btn.className = "changelog-btn px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95";
             });
 
-            // 2. Apply active pink style to clicked button
-            clickedButton.className = "changelog-btn px-4 py-2 rounded-full text-sm font-bold text-pink-500 bg-pink-950/40 border border-pink-500/50 transition-all duration-300 transform active:scale-95 shadow-lg shadow-pink-900/30";
+            clickedButton.className = "changelog-btn px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold text-pink-500 bg-pink-950/40 border border-pink-500/50 transition-all duration-300 transform active:scale-95 shadow-lg shadow-pink-900/30";
 
-            // 3. Filter items with animation effect
             const container = document.getElementById('changelogContainer');
             container.classList.remove('opacity-100', 'translate-y-0');
             container.classList.add('opacity-0', 'translate-y-4');
@@ -734,19 +743,19 @@
     </script>
 
     <!-- PAGE 3: SCREENSHOTS -->
-    <main id="screenshotsView" class="view pt-40 pb-20 px-6 max-w-5xl mx-auto text-center">
-        <h2 class="text-4xl font-bold mb-4">Screenshots</h2>
-        <p class="text-slate-400 mb-8 text-sm">Visual tour of the customized One UI system interface.</p>
+    <main id="screenshotsView" class="view pt-28 sm:pt-36 pb-20 px-4 sm:px-6 max-w-5xl mx-auto text-center">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4">Screenshots</h2>
+        <p class="text-slate-400 mb-6 sm:mb-8 text-xs sm:text-sm">Visual tour of the customized One UI system interface.</p>
 
-        <!-- Smaller Edition Selector Options -->
-        <div class="flex justify-center items-center gap-3 mb-10">
-            <button onclick="switchEdition('vanilla', this)" class="edition-btn px-4 py-2 rounded-full text-sm font-bold text-pink-500 bg-pink-950/40 border border-pink-500/50 transition-all duration-300 transform active:scale-95 shadow-lg shadow-pink-900/30">Vanilla Edition</button>
-            <button onclick="switchEdition('crystal', this)" class="edition-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Crystal Edition</button>
-            <button onclick="switchEdition('standard', this)" class="edition-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Standard Edition</button>
-            <button onclick="switchEdition('cupid', this)" class="edition-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Cupid Edition</button>
+        <!-- Edition Selector Options -->
+        <div class="flex justify-center items-center gap-2 sm:gap-3 mb-8 sm:mb-10 flex-wrap">
+            <button onclick="switchEdition('vanilla', this)" class="edition-btn px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold text-pink-500 bg-pink-950/40 border border-pink-500/50 transition-all duration-300 transform active:scale-95 shadow-lg shadow-pink-900/30">Vanilla Edition</button>
+            <button onclick="switchEdition('crystal', this)" class="edition-btn px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Crystal Edition</button>
+            <button onclick="switchEdition('standard', this)" class="edition-btn px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Standard Edition</button>
+            <button onclick="switchEdition('cupid', this)" class="edition-btn px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95">Cupid Edition</button>
         </div>
 
-        <!-- Screenshot Grid with 1080x2400 Aspect Ratio, Top Camera Dot & Reduced Rounded Corners -->
+        <!-- Screenshot Grid -->
         <div id="screenshotGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-6 transition-all duration-300 opacity-100 transform translate-y-0">
             <div class="glass-panel aspect-[9/20] w-full flex items-center justify-center overflow-hidden p-2 relative rounded-2xl">
                 <!-- Top Center Camera Dot -->
@@ -767,63 +776,63 @@
     </main>
 
     <!-- PAGE 4: CREDITS -->
-    <main id="creditsView" class="view pt-40 pb-20 px-6 max-w-5xl mx-auto text-center">
-        <h2 class="text-4xl font-bold mb-4">People behind the ROM</h2>
-        <p class="text-slate-400 mb-12 text-sm">Meet the dedicated team that makes Vought Project possible.</p>
+    <main id="creditsView" class="view pt-28 sm:pt-36 pb-20 px-4 sm:px-6 max-w-5xl mx-auto text-center">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4">People behind the ROM</h2>
+        <p class="text-slate-400 mb-8 sm:mb-12 text-xs sm:text-sm">Meet the dedicated team that makes Vought Project possible.</p>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             <!-- Member 1 -->
             <div class="glass-panel p-6 flex flex-col items-center transition-all duration-300 hover:-translate-y-2 hover:border-pink-500/40">
-                <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-white/10 p-1">
+                <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mb-4 border-2 border-white/10 p-1">
                     <img src="images/member1.jpg" alt="Team Member 1" class="w-full h-full object-cover rounded-full">
                 </div>
-                <h3 class="text-xl font-bold text-slate-200">Ice</h3>
-                <p class="text-pink-400 text-sm font-semibold mb-2">Lead Developer / Exynos 9611 Maintainer</p>
+                <h3 class="text-lg sm:text-xl font-bold text-slate-200">Ice</h3>
+                <p class="text-pink-400 text-xs sm:text-sm font-semibold mb-2">Lead Developer / Exynos 9611 Maintainer</p>
             </div>
 
             <!-- Member 2 -->
             <div class="glass-panel p-6 flex flex-col items-center transition-all duration-300 hover:-translate-y-2 hover:border-pink-500/40">
-                <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-white/10 p-1">
+                <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mb-4 border-2 border-white/10 p-1">
                     <img src="images/member2.jpg" alt="Team Member 2" class="w-full h-full object-cover rounded-full">
                 </div>
-                <h3 class="text-xl font-bold text-slate-200">Dai-doz</h3>
-                <p class="text-pink-400 text-sm font-semibold mb-2">Exynos 850 / Website Developer</p>
+                <h3 class="text-lg sm:text-xl font-bold text-slate-200">Dai-doz</h3>
+                <p class="text-pink-400 text-xs sm:text-sm font-semibold mb-2">Exynos 850 / Website Developer</p>
             </div>
 
             <!-- Member 3 -->
             <div class="glass-panel p-6 flex flex-col items-center transition-all duration-300 hover:-translate-y-2 hover:border-pink-500/40">
-                <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-white/10 p-1">
+                <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mb-4 border-2 border-white/10 p-1">
                     <img src="images/member3.jpg" alt="Team Member 3" class="w-full h-full object-cover rounded-full">
                 </div>
-                <h3 class="text-xl font-bold text-slate-200">Homelander</h3>
-                <p class="text-pink-400 text-sm font-semibold mb-2">Exynos 1380 Maintainer</p>
+                <h3 class="text-lg sm:text-xl font-bold text-slate-200">Homelander</h3>
+                <p class="text-pink-400 text-xs sm:text-sm font-semibold mb-2">Exynos 1380 Maintainer</p>
             </div>
 
             <!-- Member 4 -->
             <div class="glass-panel p-6 flex flex-col items-center transition-all duration-300 hover:-translate-y-2 hover:border-pink-500/40">
-                <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-white/10 p-1">
+                <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mb-4 border-2 border-white/10 p-1">
                     <img src="images/member4.jpg" alt="Team Member 4" class="w-full h-full object-cover rounded-full">
                 </div>
-                <h3 class="text-xl font-bold text-slate-200">Ryxx</h3>
-                <p class="text-pink-400 text-sm font-semibold mb-2">Tester mikuuuuuuuuuuu</p>
+                <h3 class="text-lg sm:text-xl font-bold text-slate-200">Ryxx</h3>
+                <p class="text-pink-400 text-xs sm:text-sm font-semibold mb-2">Tester mikuuuuuuuuuuu</p>
             </div>
 
             <!-- Member 5 -->
             <div class="glass-panel p-6 flex flex-col items-center transition-all duration-300 hover:-translate-y-2 hover:border-pink-500/40">
-                <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-white/10 p-1">
+                <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mb-4 border-2 border-white/10 p-1">
                     <img src="images/member5.jpg" alt="Team Member 5" class="w-full h-full object-cover rounded-full">
                 </div>
-                <h3 class="text-xl font-bold text-slate-200">Freddel</h3>
-                <p class="text-pink-400 text-sm font-semibold mb-2">Tester / QA / Helper</p>
+                <h3 class="text-lg sm:text-xl font-bold text-slate-200">Freddel</h3>
+                <p class="text-pink-400 text-xs sm:text-sm font-semibold mb-2">Tester / QA / Helper</p>
             </div>
 
             <!-- Member 6 -->
             <div class="glass-panel p-6 flex flex-col items-center transition-all duration-300 hover:-translate-y-2 hover:border-pink-500/40">
-                <div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-white/10 p-1">
+                <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden mb-4 border-2 border-white/10 p-1">
                     <img src="images/member6.jpg" alt="Team Member 6" class="w-full h-full object-cover rounded-full">
                 </div>
-                <h3 class="text-xl font-bold text-slate-200">Kultrinhaa</h3>
-                <p class="text-pink-400 text-sm font-semibold mb-2">Banner maker</p>
+                <h3 class="text-lg sm:text-xl font-bold text-slate-200">Kultrinhaa</h3>
+                <p class="text-pink-400 text-xs sm:text-sm font-semibold mb-2">Banner maker</p>
             </div>
         </div>
     </main>
@@ -850,20 +859,16 @@
                 }
             };
 
-            // 1. Reset all buttons to inactive style
             document.querySelectorAll('.edition-btn').forEach(btn => {
-                btn.className = "edition-btn px-4 py-2 rounded-full text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95";
+                btn.className = "edition-btn px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold text-slate-400 bg-slate-800/60 border border-slate-700 hover:bg-slate-700 transition-all duration-300 transform active:scale-95";
             });
 
-            // 2. Apply active pink style to the clicked button
-            clickedButton.className = "edition-btn px-4 py-2 rounded-full text-sm font-bold text-pink-500 bg-pink-950/40 border border-pink-500/50 transition-all duration-300 transform active:scale-95 shadow-lg shadow-pink-900/30";
+            clickedButton.className = "edition-btn px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold text-pink-500 bg-pink-950/40 border border-pink-500/50 transition-all duration-300 transform active:scale-95 shadow-lg shadow-pink-900/30";
 
-            // 3. Animate out the grid
             const grid = document.getElementById('screenshotGrid');
             grid.classList.remove('opacity-100', 'translate-y-0');
             grid.classList.add('opacity-0', 'translate-y-4');
 
-            // 4. Change images, alt texts, and animate back in
             setTimeout(() => {
                 const currentData = data[edition];
                 if (currentData) {
@@ -886,15 +891,15 @@
         }
     </script>
 
-    <!-- VERSION SELECTION MODAL -->
-    <div id="versionModal" class="fixed inset-0 z-[200] hidden items-center justify-center bg-black/80 backdrop-blur-md p-4">
-        <div class="glass-panel max-w-md w-full p-6 space-y-6 relative border border-white/10 shadow-2xl">
-            <div class="flex items-center justify-between border-b border-white/10 pb-3">
+    <!-- VERSION SELECTION MODAL WITH MOBILE SCROLL FIX -->
+    <div id="versionModal" class="fixed inset-0 z-[200] hidden items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-y-auto">
+        <div class="glass-panel max-w-md w-full p-5 sm:p-6 space-y-5 sm:space-y-6 relative border border-white/10 shadow-2xl max-h-[85vh] overflow-y-auto my-auto no-scrollbar">
+            <div class="flex items-center justify-between border-b border-white/10 pb-3 sticky top-0 bg-slate-900/90 backdrop-blur-md z-10 -mx-1 px-1">
                 <div>
-                    <h3 id="modalDeviceTitle" class="text-xl font-bold">Select Edition</h3>
+                    <h3 id="modalDeviceTitle" class="text-lg sm:text-xl font-bold">Select Edition</h3>
                     <p id="modalDeviceSub" class="text-xs text-slate-400 font-mono"></p>
                 </div>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-white text-xl">
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white text-xl p-1">
                     <i class="ph-bold ph-x"></i>
                 </button>
             </div>
@@ -911,44 +916,44 @@
 
             <div class="space-y-3">
                 <!-- Edition Option 1 -->
-                <button onclick="selectVersion('standard')" class="w-full text-left p-4 rounded-xl bg-white/5 border border-white/10 hover:border-pink-500/50 hover:bg-pink-500/5 transition-all flex items-center justify-between group">
+                <button onclick="selectVersion('standard')" class="w-full text-left p-3.5 sm:p-4 rounded-xl bg-white/5 border border-white/10 hover:border-pink-500/50 hover:bg-pink-500/5 transition-all flex items-center justify-between group">
                     <div>
-                        <div class="font-bold text-sm text-slate-200 group-hover:text-pink-400 transition-colors">Vought Project - A35 5G</div>
-                        <div class="text-xs text-slate-400">Smooth OneUI 8.5 Base</div>
+                        <div class="font-bold text-xs sm:text-sm text-slate-200 group-hover:text-pink-400 transition-colors">Vought Project - Standard Edition</div>
+                        <div class="text-[11px] sm:text-xs text-slate-400">Smooth OneUI 8.5 Base</div>
                     </div>
                     <i class="ph-bold ph-caret-right text-slate-500 group-hover:text-pink-400 group-hover:translate-x-1 transition-all"></i>
                 </button>
 
                 <!-- Edition Option 2 -->
-                <button onclick="selectVersion('vanilla')" class="w-full text-left p-4 rounded-xl bg-white/5 border border-white/10 hover:border-pink-500/50 hover:bg-pink-500/5 transition-all flex items-center justify-between group">
+                <button onclick="selectVersion('vanilla')" class="w-full text-left p-3.5 sm:p-4 rounded-xl bg-white/5 border border-white/10 hover:border-pink-500/50 hover:bg-pink-500/5 transition-all flex items-center justify-between group">
                     <div>
-                        <div id="vanillaOptionTitle" class="font-bold text-sm text-slate-200 group-hover:text-pink-400 transition-colors">Vought Project - Vanilla Edition</div>
-                        <div class="text-xs text-slate-400">Smoothest Experince With S21FE OneUI 7.0 Base</div>
+                        <div id="vanillaOptionTitle" class="font-bold text-xs sm:text-sm text-slate-200 group-hover:text-pink-400 transition-colors">Vought Project - Vanilla Edition</div>
+                        <div class="text-[11px] sm:text-xs text-slate-400">Smoothest Experience With S21FE OneUI 7.0 Base</div>
                     </div>
                     <i class="ph-bold ph-caret-right text-slate-500 group-hover:text-pink-400 group-hover:translate-x-1 transition-all"></i>
                 </button>
 
                 <!-- Edition Option 3 -->
-                <button onclick="selectVersion('crystal')" class="w-full text-left p-4 rounded-xl bg-white/5 border border-white/10 hover:border-pink-500/50 hover:bg-pink-500/5 transition-all flex items-center justify-between group">
+                <button onclick="selectVersion('crystal')" class="w-full text-left p-3.5 sm:p-4 rounded-xl bg-white/5 border border-white/10 hover:border-pink-500/50 hover:bg-pink-500/5 transition-all flex items-center justify-between group">
                     <div>
-                        <div class="font-bold text-sm text-slate-200 group-hover:text-pink-400 transition-colors">Vought Project - CRYSTAL Edition</div>
-                        <div class="text-xs text-slate-400">Ai + Live Blur S23FE OneUI 8.5 Base</div>
+                        <div class="font-bold text-xs sm:text-sm text-slate-200 group-hover:text-pink-400 transition-colors">Vought Project - CRYSTAL Edition</div>
+                        <div class="text-[11px] sm:text-xs text-slate-400">AI + Live Blur S23FE OneUI 8.5 Base</div>
                     </div>
                     <i class="ph-bold ph-caret-right text-slate-500 group-hover:text-pink-400 group-hover:translate-x-1 transition-all"></i>
                 </button>
 
                 <!-- Edition Option 4 -->
-                <button onclick="selectVersion('cupid')" class="w-full text-left p-4 rounded-xl bg-white/5 border border-white/10 hover:border-pink-500/50 hover:bg-pink-500/5 transition-all flex items-center justify-between group">
+                <button onclick="selectVersion('cupid')" class="w-full text-left p-3.5 sm:p-4 rounded-xl bg-white/5 border border-white/10 hover:border-pink-500/50 hover:bg-pink-500/5 transition-all flex items-center justify-between group">
                     <div>
-                        <div id="cupidOptionTitle" class="font-bold text-sm text-slate-200 group-hover:text-pink-400 transition-colors">Vought Project - Cupid Edition</div>
-                        <div class="text-xs text-slate-400">Coming soon</div>
+                        <div id="cupidOptionTitle" class="font-bold text-xs sm:text-sm text-slate-200 group-hover:text-pink-400 transition-colors">Vought Project - Cupid Edition</div>
+                        <div class="text-[11px] sm:text-xs text-slate-400">Coming soon</div>
                     </div>
                     <i class="ph-bold ph-caret-right text-slate-500 group-hover:text-pink-400 group-hover:translate-x-1 transition-all"></i>
                 </button>
             </div>
 
             <div id="downloadActionContainer" class="hidden border-t border-white/10 pt-4">
-                <a id="modalDownloadBtn" href="#" target="_blank" class="w-full py-3 rounded-xl bg-gradient-to-r from-pink-500 to-orange-500 text-white font-semibold text-sm shadow-lg hover:opacity-90 transition-all text-center flex items-center justify-center gap-2">
+                <a id="modalDownloadBtn" href="#" target="_blank" class="w-full py-3 rounded-xl bg-gradient-to-r from-pink-500 to-orange-500 text-white font-semibold text-xs sm:text-sm shadow-lg hover:opacity-90 transition-all text-center flex items-center justify-center gap-2">
                     <i class="ph-bold ph-download-simple"></i> Proceed to Download
                 </a>
             </div>
@@ -975,7 +980,7 @@
                 title: "Galaxy A35 5G",
                 sub: "SM-A356E",
                 downloads: {
-                    standard: "https://drive.usercontent.google.com/download?id=1-gR16n_KwESMdWgkBjr2qsNMMkkItNV9",
+                    standard: "https://drive.usercontent.google.com/download?id=1-gR16n_KwESMdWgkBjr2qsNMMkkItNV",
                     vanilla: "https://drive.usercontent.google.com/download?id=1XGKD9MjPMDDnYelU1RPVIA7MpFPqpUsO",
                     cupid: "#",
                     crystal: "#"
@@ -1014,6 +1019,7 @@
             const modal = document.getElementById('versionModal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
@@ -1022,6 +1028,7 @@
             modal.classList.remove('flex');
             document.getElementById('vanillaNotice').classList.add('hidden');
             document.getElementById('downloadActionContainer').classList.add('hidden');
+            document.body.style.overflow = 'auto';
         }
 
         function selectVersion(versionType) {
@@ -1137,6 +1144,7 @@
 
         function initFeatureCanvas() {
             const wrapper = fCanvas.parentElement;
+            if (!wrapper) return;
             fCanvas.width = wrapper.clientWidth;
             fCanvas.height = wrapper.clientHeight;
             featureParticles = [];
